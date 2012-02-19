@@ -102,9 +102,9 @@ class SampleWidget extends WidgetExtension {
         cancelScheduledRefresh(SampleExtensionService.EXTENSION_KEY);
         scheduleRepeatingRefresh(System.currentTimeMillis(), UPDATE_INTERVAL,
                 SampleExtensionService.EXTENSION_KEY);
-        String[] hoge = getTwitterTrend();
-        for (int j = 0; j<hoge.length; j++) {
-        	Log.d("trend", "trend : " + hoge[j]);
+        this.stringArray = getTwitterTrend();
+        for (int j = 0; j<stringArray.length; j++) {
+        	Log.d("trend", "trend : " + stringArray[j]);
         }
     }
 
