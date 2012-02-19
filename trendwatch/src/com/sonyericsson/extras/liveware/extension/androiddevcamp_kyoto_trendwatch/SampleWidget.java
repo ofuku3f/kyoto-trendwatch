@@ -270,7 +270,7 @@ class SampleWidget extends WidgetExtension {
     
     private String getPrefWoeid() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        //return prefs.getString(mContext.getString(R.string.preference_activity_title), "23424829");
-        return "23424829";
+        return prefs.getString(SamplePreferenceActivity.PREFERENCE_AREA_KEY, "23424829");
+        //return "23424829";
     }
 }
