@@ -35,13 +35,16 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 
 public class SamplePreferenceActivity extends PreferenceActivity {
+	public static final String PREFERENCE_AREA_KEY = "preference_area_key";
     private static final int DIALOG_READ_ME = 1;
     private static final int DIALOG_AREA_SET_1 = 2;
     private static final int DIALOG_AREA_SET_2 = 3;
@@ -126,15 +129,20 @@ public class SamplePreferenceActivity extends PreferenceActivity {
     
     private Dialog createAreaSetDialog(int id) {
     	String text = "";
+    	
+        Editor editor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
         switch (id) {
         case DIALOG_AREA_SET_2:
         	text = "Set Area Germany";
+            editor.putString(this.PREFERENCE_AREA_KEY, "23424829");
             break;
         case DIALOG_AREA_SET_1:
         default:
         	text = "Set Area Kyoto";
+            editor.putString(this.PREFERENCE_AREA_KEY, "15015372");
             break;
         }
+        editor.commit();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(text)
