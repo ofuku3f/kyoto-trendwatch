@@ -102,7 +102,9 @@ class SampleWidget extends WidgetExtension {
         cancelScheduledRefresh(SampleExtensionService.EXTENSION_KEY);
         scheduleRepeatingRefresh(System.currentTimeMillis(), UPDATE_INTERVAL,
                 SampleExtensionService.EXTENSION_KEY);
-        this.stringArray = getTwitterTrend();
+        
+        String woeid = getPrefWoeid();
+        this.stringArray = getTwitterTrend(woeid);
         for (int j = 0; j<stringArray.length; j++) {
         	Log.d("trend", "trend : " + stringArray[j]);
         }
@@ -217,11 +219,11 @@ class SampleWidget extends WidgetExtension {
     /**
      * get trend from Twitter API
      */
-    private String[] getTwitterTrend () {
+    private String[] getTwitterTrend (String _woeid) {
     	Log.d(SampleExtensionService.LOG_TAG, "getTwitterTrend");
     	
     	try {
-    		URI uri = new URI("https://api.twitter.com/1/trends/23424856.json");
+    		URI uri = new URI("https://api.twitter.com/1/trends/"+_woeid+".json");
             HttpURLConnection con = (HttpURLConnection) uri.toURL().openConnection();
             InputStream is = con.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -264,5 +266,11 @@ class SampleWidget extends WidgetExtension {
     	} catch (Exception e) {
     		Log.d(SampleExtensionService.LOG_TAG, "JSON generate string error", e);
     	}
+    }
+    
+    private String getPrefWoeid() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        //return prefs.getString(mContext.getString(R.string.preference_activity_title), "23424829");
+        return "23424829";
     }
 }
