@@ -13,4 +13,8 @@
     <string name="preference_key_read_me">preference_key_read_me</string>
     <string name="preference_option_read_me_txt">The sample widget extension shows current time on the accessory.\n\nThe time is updated every minute.\n\nWhen tapping on the widget the time switches between 12 hour am/pm and 24 hour display mode. </string>
     <string name="preference_key_clock_mode">preference_key_clock_mode</string>
+    <string name="preference_option_area_set_1">trend area kyoto</string>
+    <string name="preference_key_area_set_1">preference_key_area_set_1</string><string name="preference_option_area_set_2">trend area Germany</string>
+    
+    <string name="preference_key_area_set_2">preference_key_area_set_2</string>
 </resources>

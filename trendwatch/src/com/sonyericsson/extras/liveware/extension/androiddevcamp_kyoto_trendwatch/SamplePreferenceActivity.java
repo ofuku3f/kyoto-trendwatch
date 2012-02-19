@@ -35,14 +35,19 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 
 public class SamplePreferenceActivity extends PreferenceActivity {
+	public static final String PREFERENCE_AREA_KEY = "preference_area_key";
     private static final int DIALOG_READ_ME = 1;
+    private static final int DIALOG_AREA_SET_1 = 2;
+    private static final int DIALOG_AREA_SET_2 = 3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,24 @@ public class SamplePreferenceActivity extends PreferenceActivity {
                 return true;
             }
         });
+        
+        Preference preference1 = findPreference(getText(R.string.preference_key_area_set_1));
+        preference1.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+            public boolean onPreferenceClick(Preference preference) {
+                showDialog(DIALOG_AREA_SET_1);
+                return true;
+            }
+        });
+
+        Preference preference2 = findPreference(getText(R.string.preference_key_area_set_2));
+        preference2.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+            public boolean onPreferenceClick(Preference preference) {
+                showDialog(DIALOG_AREA_SET_2);
+                return true;
+            }
+        });
 
     }
 
@@ -70,6 +93,12 @@ public class SamplePreferenceActivity extends PreferenceActivity {
         switch (id) {
             case DIALOG_READ_ME:
                 dialog = createReadMeDialog();
+                break;
+            case DIALOG_AREA_SET_1:
+            	dialog = createAreaSetDialog(id);
+                break;
+            case DIALOG_AREA_SET_2:
+            	dialog = createAreaSetDialog(id);
                 break;
             default:
                 Log.w(SampleExtensionService.LOG_TAG, "Not a valid dialog id: " + id);
@@ -87,6 +116,36 @@ public class SamplePreferenceActivity extends PreferenceActivity {
     private Dialog createReadMeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.preference_option_read_me_txt)
+                .setTitle(R.string.preference_option_read_me)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton(android.R.string.ok, new OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        return builder.create();
+    }
+    
+    private Dialog createAreaSetDialog(int id) {
+    	String text = "";
+    	
+        Editor editor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+        switch (id) {
+        case DIALOG_AREA_SET_2:
+        	text = "Set Area Germany";
+            editor.putString(this.PREFERENCE_AREA_KEY, "23424829");
+            break;
+        case DIALOG_AREA_SET_1:
+        default:
+        	text = "Set Area Kyoto";
+            editor.putString(this.PREFERENCE_AREA_KEY, "15015372");
+            break;
+        }
+        editor.commit();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(text)
                 .setTitle(R.string.preference_option_read_me)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setPositiveButton(android.R.string.ok, new OnClickListener() {
