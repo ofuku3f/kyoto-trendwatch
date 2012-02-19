@@ -14,3 +14,9 @@ gen/
 
 # Local configuration file (sdk path, etc)
 local.properties
+
+trendwatch/.classpath
+
+trendwatch/project.properties
+
+trendwatch/lint.xml
