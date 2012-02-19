@@ -77,6 +77,10 @@ class SampleWidget extends WidgetExtension {
             new Locale("se"));
     
     private String[] twitterTrend;
+    
+    private int arrayCnt = 0;
+    private String[] stringArray = {"hoge1","hoge2","hoge3","hoge4","hoge5","hoge6","hoge7","hoge8","hoge9","hoge10"};
+    private String currentString = "trend";
 
     /**
      * Create sample widget.
@@ -118,6 +122,7 @@ class SampleWidget extends WidgetExtension {
     @Override
     public void onScheduledRefresh() {
         Log.d(SampleExtensionService.LOG_TAG, "scheduledRefresh()");
+    	setCurrentString();
         updateWidget();
     }
 
@@ -147,12 +152,27 @@ class SampleWidget extends WidgetExtension {
         }
 
         if (type == Widget.Intents.EVENT_TYPE_SHORT_TAP) {
+        	/*
             // Change clock mode on short tap.
             setClockMode24h(!isClockMode24h());
+            */
             // Update clock widget now
+        	addArrayCnt();
+        	setCurrentString();
             updateWidget();
         }
     }
+    
+    private void setCurrentString() {
+		this.currentString = this.stringArray[arrayCnt];
+	}
+    
+    private void addArrayCnt() {
+		arrayCnt++;
+		if (arrayCnt > (stringArray.length - 1)) {
+			arrayCnt = 0;
+		}
+	}
 
     /**
      * Set clock format
@@ -181,6 +201,7 @@ class SampleWidget extends WidgetExtension {
     private void updateWidget() {
         Log.d(SampleExtensionService.LOG_TAG, "updateWidget");
         // Get time
+        /*
         String time = null;
         if (isClockMode24h()) {
             time = TIME_FORMAT_24_H.format(new Date());
@@ -189,6 +210,8 @@ class SampleWidget extends WidgetExtension {
         }
 
         showBitmap(new SmartWatchSampleWidgetImage(mContext, time).getBitmap());
+        */
+        showBitmap(new SmartWatchSampleWidgetImage(mContext, this.currentString).getBitmap());
     }
     
     /**
