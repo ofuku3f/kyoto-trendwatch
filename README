@@ -1,0 +1,29 @@
+TrendWatch Project
+
+コンパイル方法
+git clone git@github.com:ofuku3f/kyoto-trendwatch.git
+
+Eclipseに
+SmartExtensionAPI
+SmartExtensionUtils
+trendwatch
+をAndroidプロジェクトとして追加
+
+http://developer.sonyericsson.com/wportal/devworld/technology/smart-extras/smart-extension-sdk?cc=gb&lc=en
+から
+Smart Extension SDK
+をダウンロード
+
+SmartExtension_SDK_version_1.0.1.zip
+を解凍
+
+SmartExtension_SDK_version1.0.1/Smartextension_emulator/AhaEmulator_Sony-Ericsson-E-Application-Signing-Live-864f-1.apk
+を端末にインストール
+
+https://market.android.com/details?id=com.sonyericsson.extras.liveware
+を端末にインストール
+
+trendwatchを実機に転送
+
+Smart Extension Emulator
+を起動
