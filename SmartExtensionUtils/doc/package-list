@@ -1,0 +1,5 @@
+com.sonyericsson.extras.liveware.extension.util
+com.sonyericsson.extras.liveware.extension.util.control
+com.sonyericsson.extras.liveware.extension.util.notification
+com.sonyericsson.extras.liveware.extension.util.sensor
+com.sonyericsson.extras.liveware.extension.util.widget
