@@ -31,9 +31,21 @@
 
 package com.sonyericsson.extras.liveware.extension.androiddevcamp_kyoto_trendwatch;
 
-import com.sonyericsson.extras.liveware.aef.widget.Widget;
-import com.sonyericsson.extras.liveware.extension.util.SmartWatchConst;
-import com.sonyericsson.extras.liveware.extension.util.widget.WidgetExtension;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -42,9 +54,9 @@ import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.sonyericsson.extras.liveware.aef.widget.Widget;
+import com.sonyericsson.extras.liveware.extension.util.SmartWatchConst;
+import com.sonyericsson.extras.liveware.extension.util.widget.WidgetExtension;
 
 /**
  * The sample widget handles the widget on an accessory. This class exists in
@@ -63,6 +75,8 @@ class SampleWidget extends WidgetExtension {
 
     private static final SimpleDateFormat TIME_FORMAT_AM_PM = new SimpleDateFormat("hh:mm a",
             new Locale("se"));
+    
+    private String[] twitterTrend;
 
     /**
      * Create sample widget.
@@ -84,6 +98,10 @@ class SampleWidget extends WidgetExtension {
         cancelScheduledRefresh(SampleExtensionService.EXTENSION_KEY);
         scheduleRepeatingRefresh(System.currentTimeMillis(), UPDATE_INTERVAL,
                 SampleExtensionService.EXTENSION_KEY);
+        String[] hoge = getTwitterTrend();
+        for (int j = 0; j<hoge.length; j++) {
+        	Log.d("trend", "trend : " + hoge[j]);
+        }
     }
 
     /**
@@ -171,5 +189,57 @@ class SampleWidget extends WidgetExtension {
         }
 
         showBitmap(new SmartWatchSampleWidgetImage(mContext, time).getBitmap());
+    }
+    
+    /**
+     * get trend from Twitter API
+     */
+    private String[] getTwitterTrend () {
+    	Log.d(SampleExtensionService.LOG_TAG, "getTwitterTrend");
+    	
+    	try {
+    		URI uri = new URI("https://api.twitter.com/1/trends/23424856.json");
+            HttpURLConnection con = (HttpURLConnection) uri.toURL().openConnection();
+            InputStream is = con.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            String jsonStr = "";
+            while ((line = reader.readLine()) != null) {
+                //Log.d("json", line);
+                jsonStr = jsonStr.concat(line);
+            }
+            is.close();
+            reader.close();
+            //Log.d("json", "jsonstr:" + jsonStr);
+            generateTwitterTrendString(jsonStr);
+        } catch (URISyntaxException e) {
+            Log.d(SampleExtensionService.LOG_TAG, "URI Syntax error", e);
+        } catch (MalformedURLException e) {
+            Log.d(SampleExtensionService.LOG_TAG, "URL Malformed Error", e);
+        } catch (IOException e) {
+            Log.d(SampleExtensionService.LOG_TAG, "IO error", e);
+		}
+		return twitterTrend;
+    }
+    
+    private void generateTwitterTrendString (String jsonStr) {
+    	try {
+    		//Log.d("", "jsonstr:" + jsonStr);
+    		JSONArray json = new JSONArray(jsonStr);
+    		JSONObject jsonobj = json.getJSONObject(0);
+    		JSONArray results = jsonobj.getJSONArray("trends");
+    		int cnt = results.length();
+    		//Log.d("", "jsonarraycnt:"+cnt);
+    		twitterTrend = new String[cnt];
+    		for (int i = 0; i < cnt; i++) {
+    			JSONObject item = results.getJSONObject(i);
+    			
+    			String name = item.getString("name");
+    			//Log.d("trend name", "trendName : " + name);
+    			twitterTrend[i] = name;
+    		}
+    	} catch (Exception e) {
+    		Log.d(SampleExtensionService.LOG_TAG, "JSON generate string error", e);
+    	}
     }
 }
